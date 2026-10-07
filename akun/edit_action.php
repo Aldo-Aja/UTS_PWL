@@ -2,8 +2,14 @@
 include '../conn.php';
 
 $id = $_POST['id'];
-$name = $_POST['name'];
-$email = $_POST['email'];
+$name = trim($_POST['name']);
+$email = trim($_POST['email']);
+
+if (!preg_match('/^[a-zA-Z0-9._%+-]+@pnj\.ac\.id$/i', $email)) {
+    header("location:edit.php?id=" . urlencode($id) . "&pesan=invalid_domain");
+    exit;
+}
+
 $account_type_id = $_POST['account_type_id'];
 $status = $_POST['status'];
 $identification_type = $_POST['identification_type'];

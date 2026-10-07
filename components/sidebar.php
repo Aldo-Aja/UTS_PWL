@@ -6,7 +6,7 @@ if (!isset($active_menu)) {
     $active_menu = "";
 }
 $user_name = isset($_SESSION['name']) ? $_SESSION['name'] : 'Administrator';
-$user_email = isset($_SESSION['email']) ? $_SESSION['email'] : 'admin@it.pnj.ac.id';
+$user_email = isset($_SESSION['email']) ? $_SESSION['email'] : 'admin@pnj.ac.id';
 ?>
 <div class="d-flex flex-column flex-shrink-0 bg-dark text-white" style="width: 240px; min-height: 100vh;">
     <div class="p-3 border-bottom border-secondary">

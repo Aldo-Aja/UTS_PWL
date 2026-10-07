@@ -42,14 +42,14 @@ $data = mysqli_query($conn, $sql);
                 <?php 
                 if ($_GET['pesan'] == 'tambah') echo "Jenis aksi berhasil ditambahkan!";
                 else if ($_GET['pesan'] == 'edit') echo "Jenis aksi berhasil diperbarui!";
-                else if ($_GET['pesan'] == 'hapus') echo "Jenis aksi berhasil dihapus (soft delete)!";
+                else if ($_GET['pesan'] == 'hapus') echo "Jenis aksi berhasil dihapus!";
                 ?>
             </div>
         <?php } ?>
 
         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
             <form method="GET" action="index.php" class="d-flex gap-2" style="max-width: 480px; flex: 1;">
-                <input type="text" name="cari" class="form-control" placeholder="Cari nama atau deskripsi..." value="<?php echo $cari; ?>">
+                <input type="text" name="cari" class="form-control" placeholder="Cari jenis aksi..." value="<?php echo $cari; ?>">
                 <button type="submit" class="btn btn-secondary px-3">Cari</button>
                 <?php if (!empty($cari)) { ?>
                     <a href="index.php" class="btn btn-outline-secondary">Reset</a>
@@ -79,18 +79,16 @@ $data = mysqli_query($conn, $sql);
                             <tr>
                                 <td class="ps-3 text-muted"><?php echo $no++; ?></td>
                                 <td class="fw-semibold text-dark">
-                                    <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-2 py-1">
-                                        <?php echo $row['name']; ?>
-                                    </span>
+                                    <?php echo $row['name']; ?>
                                 </td>
                                 <td class="text-secondary"><?php echo $row['description']; ?></td>
                                 <td class="text-muted small">
                                     <?php echo date('d M Y H:i', strtotime($row['created_at'])); ?>
                                 </td>
                                 <td class="text-center pe-3">
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-outline-warning">Edit</a>
-                                        <a href="hapus.php?id=<?php echo $row['id']; ?>" class="btn btn-outline-danger" onclick="return confirm('Yakin ingin menghapus jenis aksi ini?')">Hapus</a>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-warning">Edit</a>
+                                        <a href="hapus.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Yakin ingin menghapus jenis aksi ini?')">Hapus</a>
                                     </div>
                                 </td>
                             </tr>

@@ -48,14 +48,14 @@ $data = mysqli_query($conn, $sql);
                 <?php 
                 if ($_GET['pesan'] == 'tambah') echo "Data akun berhasil ditambahkan!";
                 else if ($_GET['pesan'] == 'edit') echo "Data akun berhasil diperbarui!";
-                else if ($_GET['pesan'] == 'hapus') echo "Data akun berhasil dihapus (soft delete)!";
+                else if ($_GET['pesan'] == 'hapus') echo "Data akun berhasil dihapus!";
                 ?>
             </div>
         <?php } ?>
 
         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
             <form method="GET" action="index.php" class="d-flex gap-2" style="max-width: 480px; flex: 1;">
-                <input type="text" name="cari" class="form-control" placeholder="Cari nama, email, NIM/NIP, atau tipe akun..." value="<?php echo $cari; ?>">
+                <input type="text" name="cari" class="form-control" placeholder="Cari data akun..." value="<?php echo $cari; ?>">
                 <button type="submit" class="btn btn-secondary px-3">Cari</button>
                 <?php if (!empty($cari)) { ?>
                     <a href="index.php" class="btn btn-outline-secondary">Reset</a>
@@ -89,26 +89,18 @@ $data = mysqli_query($conn, $sql);
                                 <td class="fw-semibold text-dark"><?php echo $row['name']; ?></td>
                                 <td class="text-secondary"><?php echo $row['email']; ?></td>
                                 <td>
-                                    <span class="badge bg-light text-dark border">
-                                        <?php echo $row['identification_type']; ?>: <?php echo $row['identification_number']; ?>
-                                    </span>
+                                    <?php echo $row['identification_type']; ?>: <?php echo $row['identification_number']; ?>
                                 </td>
                                 <td>
-                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">
-                                        <?php echo $row['tipe_akun_nama']; ?>
-                                    </span>
+                                    <?php echo $row['tipe_akun_nama']; ?>
                                 </td>
                                 <td>
-                                    <?php if ($row['status'] == 'Aktif') { ?>
-                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Aktif</span>
-                                    <?php } else { ?>
-                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2 py-1">Nonaktif</span>
-                                    <?php } ?>
+                                    <?php echo $row['status']; ?>
                                 </td>
                                 <td class="text-center pe-3">
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-outline-warning">Edit</a>
-                                        <a href="hapus.php?id=<?php echo $row['id']; ?>" class="btn btn-outline-danger" onclick="return confirm('Yakin ingin menghapus akun ini?')">Hapus</a>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-warning">Edit</a>
+                                        <a href="hapus.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Yakin ingin menghapus akun ini?')">Hapus</a>
                                     </div>
                                 </td>
                             </tr>

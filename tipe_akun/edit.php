@@ -43,12 +43,12 @@ if (!$data) {
 
                     <div class="mb-3">
                         <label for="name" class="form-label small fw-semibold text-secondary">Nama Tipe Akun</label>
-                        <input type="text" class="form-control" id="name" name="name" value="<?php echo $data['name']; ?>" required>
+                        <input type="text" class="form-control" id="name" name="name" value="<?php echo $data['name']; ?>" placeholder="Masukan Nama Tipe Akun" required>
                     </div>
 
                     <div class="mb-4">
                         <label for="description" class="form-label small fw-semibold text-secondary">Deskripsi</label>
-                        <textarea class="form-control" id="description" name="description" rows="4"><?php echo $data['description']; ?></textarea>
+                        <textarea class="form-control" id="description" name="description" rows="4" placeholder="Masukan Deskripsi Tipe Akun"><?php echo $data['description']; ?></textarea>
                     </div>
 
                     <div class="d-flex gap-2">

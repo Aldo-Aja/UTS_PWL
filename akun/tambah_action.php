@@ -2,8 +2,14 @@
 include '../conn.php';
 
 $id = generate_uuid();
-$name = $_POST['name'];
-$email = $_POST['email'];
+$name = trim($_POST['name']);
+$email = trim($_POST['email']);
+
+if (!preg_match('/^[a-zA-Z0-9._%+-]+@pnj\.ac\.id$/i', $email)) {
+    header("location:tambah.php?pesan=invalid_domain");
+    exit;
+}
+
 $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 $account_type_id = $_POST['account_type_id'];
 $status = $_POST['status'];

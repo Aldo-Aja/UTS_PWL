@@ -2,8 +2,13 @@
 session_start();
 include 'conn.php';
 
-$email = $_POST['email'];
+$email = trim($_POST['email']);
 $password = $_POST['password'];
+
+if (!preg_match('/^[a-zA-Z0-9._%+-]+@pnj\.ac\.id$/i', $email)) {
+    header("location:login.php?pesan=domain");
+    exit;
+}
 
 $query = mysqli_query($conn, "SELECT * FROM accounts WHERE email='$email' AND deleted_at IS NULL");
 $row = mysqli_fetch_array($query);

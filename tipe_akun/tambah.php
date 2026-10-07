@@ -30,12 +30,12 @@ $active_menu = "tipe_akun";
                 <form action="tambah_action.php" method="POST">
                     <div class="mb-3">
                         <label for="name" class="form-label small fw-semibold text-secondary">Nama Tipe Akun</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Contoh: Admin, Dosen, Mahasiswa" required>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Masukan Nama Tipe Akun" required>
                     </div>
 
                     <div class="mb-4">
                         <label for="description" class="form-label small fw-semibold text-secondary">Deskripsi</label>
-                        <textarea class="form-control" id="description" name="description" rows="4" placeholder="Keterangan hak akses tipe akun..."></textarea>
+                        <textarea class="form-control" id="description" name="description" rows="4" placeholder="Masukan Deskripsi Tipe Akun"></textarea>
                     </div>
 
                     <div class="d-flex gap-2">

@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS `pbl_ti_2025_3c_aldoahmadhirzi`;
-USE `pbl_ti_2025_3c_aldoahmadhirzi`;
+CREATE DATABASE IF NOT EXISTS `pbl_ti_2025_3c_revaldoparikesit`;
+USE `pbl_ti_2025_3c_revaldoparikesit`;
 
 CREATE TABLE IF NOT EXISTS `account_type` (
   `id` VARCHAR(36) NOT NULL,
@@ -48,9 +48,9 @@ INSERT INTO `actions` (`id`, `name`, `description`, `created_at`, `updated_at`, 
 ('b011b98d-e43d-4c31-8935-71e16f31bf01', 'Create', 'Menambahkan data baru', '2026-10-02 10:04:00', NULL, NULL),
 ('b011b98d-e43d-4c31-8935-71e16f31bf02', 'Read', 'Melihat data', '2026-10-02 10:04:00', NULL, NULL),
 ('b011b98d-e43d-4c31-8935-71e16f31bf03', 'Update', 'Mengubah data yang sudah ada', '2026-10-02 10:04:00', NULL, NULL),
-('b011b98d-e43d-4c31-8935-71e16f31bf04', 'Delete', 'Menghapus data (soft delete)', '2026-10-02 10:04:00', NULL, NULL)
+('b011b98d-e43d-4c31-8935-71e16f31bf04', 'Delete', 'Menghapus data', '2026-10-02 10:04:00', NULL, NULL)
 ON DUPLICATE KEY UPDATE `name`=VALUES(`name`);
 
 INSERT INTO `accounts` (`id`, `name`, `email`, `password`, `account_type_id`, `status`, `identification_number`, `identification_type`, `created_at`, `updated_at`, `deleted_at`) VALUES
-('c011b98d-e43d-4c31-8935-71e16f31bf01', 'Administrator', 'admin@it.pnj.ac.id', '$2y$10$ziF.kR0eiaVzU50JOpcN9.JWAQmPZJboOBzlsGiQXD86./elwTmbK', 'a011b98d-e43d-4c31-8935-71e16f31bf01', 'Aktif', '520000000000000746', 'NIP', '2026-10-02 10:04:00', NULL, NULL)
+('c011b98d-e43d-4c31-8935-71e16f31bf01', 'Administrator', 'admin@pnj.ac.id', '$2y$10$ziF.kR0eiaVzU50JOpcN9.JWAQmPZJboOBzlsGiQXD86./elwTmbK', 'a011b98d-e43d-4c31-8935-71e16f31bf01', 'Aktif', '520000000000000746', 'NIP', '2026-10-02 10:04:00', NULL, NULL)
 ON DUPLICATE KEY UPDATE `email`=VALUES(`email`);

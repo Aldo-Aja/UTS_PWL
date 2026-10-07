@@ -26,19 +26,24 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                 <div class="alert alert-danger py-2 small mb-3">Email atau password salah!</div>
             <?php } ?>
 
+            <?php if (isset($_GET['pesan']) && $_GET['pesan'] == 'domain') { ?>
+                <div class="alert alert-danger py-2 small mb-3">Domain email harus @pnj.ac.id</div>
+            <?php } ?>
+
             <?php if (isset($_GET['pesan']) && $_GET['pesan'] == 'logout') { ?>
                 <div class="alert alert-success py-2 small mb-3">Anda telah berhasil keluar.</div>
             <?php } ?>
 
-            <form action="login_action.php" method="POST">
+            <form action="login_action.php" method="POST" id="form-login">
                 <div class="mb-3">
                     <label for="email" class="form-label small fw-semibold text-secondary">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="admin@it.pnj.ac.id" required>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Masukan Email" required autocomplete="off">
+                    <div id="email-warning" class="invalid-feedback">Domain email harus @pnj.ac.id</div>
                 </div>
 
                 <div class="mb-4">
                     <label for="password" class="form-label small fw-semibold text-secondary">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Masukan Password" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
@@ -48,5 +53,45 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
         </div>
     </div>
 
+    <script>
+    const emailInput = document.getElementById('email');
+    const emailWarning = document.getElementById('email-warning');
+    const formLogin = document.getElementById('form-login');
+
+    function checkDomain() {
+        const val = emailInput.value.trim();
+        const atIndex = val.indexOf('@');
+        if (atIndex !== -1) {
+            const domain = val.substring(atIndex + 1).toLowerCase();
+            if (domain !== 'pnj.ac.id') {
+                emailInput.classList.add('is-invalid');
+                emailWarning.style.display = 'block';
+                return false;
+            } else {
+                emailInput.classList.remove('is-invalid');
+                emailWarning.style.display = 'none';
+                return true;
+            }
+        } else {
+            emailInput.classList.remove('is-invalid');
+            emailWarning.style.display = 'none';
+            return true;
+        }
+    }
+
+    emailInput.addEventListener('input', checkDomain);
+
+    formLogin.addEventListener('submit', function(e) {
+        const val = emailInput.value.trim();
+        const atIndex = val.indexOf('@');
+        const domain = atIndex !== -1 ? val.substring(atIndex + 1).toLowerCase() : '';
+        if (domain !== 'pnj.ac.id') {
+            e.preventDefault();
+            emailInput.classList.add('is-invalid');
+            emailWarning.style.display = 'block';
+            emailInput.focus();
+        }
+    });
+    </script>
 </body>
 </html>

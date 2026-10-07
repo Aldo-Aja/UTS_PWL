@@ -30,12 +30,12 @@ $active_menu = "jenis_aksi";
                 <form action="tambah_action.php" method="POST">
                     <div class="mb-3">
                         <label for="name" class="form-label small fw-semibold text-secondary">Nama Aksi</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Contoh: Create, Read, Update, Delete" required>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Masukan Nama Jenis Aksi" required>
                     </div>
 
                     <div class="mb-4">
                         <label for="description" class="form-label small fw-semibold text-secondary">Deskripsi</label>
-                        <textarea class="form-control" id="description" name="description" rows="4" placeholder="Keterangan fungsi aksi sistem..."></textarea>
+                        <textarea class="form-control" id="description" name="description" rows="4" placeholder="Masukan Deskripsi Jenis Aksi"></textarea>
                     </div>
 
                     <div class="d-flex gap-2">

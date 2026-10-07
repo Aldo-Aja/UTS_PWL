@@ -1,6 +1,5 @@
 <?php
-include '../conn.php';
-
+include '../koneksi/conn.php';
 $id = $_POST['id'];
 $name = $_POST['name'];
 $description = $_POST['description'];
