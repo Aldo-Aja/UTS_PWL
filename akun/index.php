@@ -49,6 +49,7 @@ $data = mysqli_query($conn, $sql);
                 if ($_GET['pesan'] == 'tambah') echo "Data akun berhasil ditambahkan!";
                 else if ($_GET['pesan'] == 'edit') echo "Data akun berhasil diperbarui!";
                 else if ($_GET['pesan'] == 'hapus') echo "Data akun berhasil dihapus!";
+                else if ($_GET['pesan'] == 'status') echo "Data akun berhasil diganti statusnya!";
                 ?>
             </div>
         <?php } ?>
@@ -95,13 +96,23 @@ $data = mysqli_query($conn, $sql);
                                     <?php echo $row['tipe_akun_nama']; ?>
                                 </td>
                                 <td>
-                                    <?php echo $row['status']; ?>
+                                    <?php
+                                    if ($row['status'] == 'Aktif') {
+                                        echo "<a href='status.php?id=" . $row['id'] . "' class='btn btn-sm bg-success py-2 text-white' onclick='return confirm(\"Yakin ingin mengganti status akun ini?\")'>Aktif</a>";
+                                    } else {
+                                        echo "<a href='status.php?id=" . $row['id'] . "' class='btn btn-sm bg-secondary py-2 text-white' onclick='return confirm(\"Yakin ingin mengganti status akun ini?\")'>Nonaktif</a>";
+                                    }
+                                    ?>
                                 </td>
                                 <td class="text-center pe-3">
+                                    <?php if (isset($_SESSION['account_type_name']) && $_SESSION['account_type_name'] == 'Admin') { ?>
                                     <div class="d-flex justify-content-center gap-2">
                                         <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-warning">Edit</a>
-                                        <a href="hapus.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Yakin ingin menghapus akun ini?')">Hapus</a>
+                                        <a href="hapus.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Yakin ingin menghapus akun ini?')">Hapus</a> 
                                     </div>
+                                    <?php } else { ?>
+                                        <span class="text-muted">Tidak ada aksi</span>
+                                    <?php } ?>
                                 </td>
                             </tr>
                         <?php 

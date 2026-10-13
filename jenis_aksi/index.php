@@ -87,8 +87,14 @@ $data = mysqli_query($conn, $sql);
                                 </td>
                                 <td class="text-center pe-3">
                                     <div class="d-flex justify-content-center gap-2">
-                                        <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-warning">Edit</a>
+                                        <?php if (isset($_SESSION['account_type_name']) && $_SESSION['account_type_name'] == 'Admin') { ?>
+                                    <div class="d-flex justify-content-center gap-2">
+                                         <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-warning">Edit</a>
                                         <a href="hapus.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Yakin ingin menghapus jenis aksi ini?')">Hapus</a>
+                                    </div>
+                                    <?php } else { ?>
+                                        <span class="text-muted">Tidak ada aksi</span>
+                                    <?php } ?>
                                     </div>
                                 </td>
                             </tr>

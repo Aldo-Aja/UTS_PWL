@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS `pbl_ti_2025_3c_revaldoparikesit`;
-USE `pbl_ti_2025_3c_revaldoparikesit`;
+CREATE DATABASE IF NOT EXISTS `pbl_ti_2025_3c_aldoahmadhirzi`;
+USE `pbl_ti_2025_3c_aldoahmadhirzi`;
 
 CREATE TABLE IF NOT EXISTS `account_type` (
   `id` VARCHAR(36) NOT NULL,

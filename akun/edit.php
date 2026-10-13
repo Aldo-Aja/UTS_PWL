@@ -4,6 +4,10 @@ if (!isset($_SESSION['login'])) {
     header("Location: ../login.php");
     exit;
 }
+if (!isset($_SESSION['account_type_name']) || $_SESSION['account_type_name'] != 'Admin') {
+    header("Location: index.php");
+    exit;
+}
 
 include '../conn.php';
 
