@@ -45,6 +45,12 @@ $tipe_akun_data = mysqli_query($conn, "SELECT * FROM account_type WHERE deleted_
                     <?php if (isset($_GET['pesan']) && $_GET['pesan'] == 'invalid_domain') { ?>
                         <div class="alert alert-danger py-2 small mb-3">Domain email harus @pnj.ac.id</div>
                     <?php } ?>
+                    <?php if (isset($_GET['pesan']) && $_GET['pesan'] == 'invalid_nim') { ?>
+                        <div class="alert alert-danger py-2 small mb-3">NIM harus berupa 10 digit angka</div>
+                    <?php } ?>
+                    <?php if (isset($_GET['pesan']) && $_GET['pesan'] == 'invalid_nip') { ?>
+                        <div class="alert alert-danger py-2 small mb-3">NIP harus berupa 18 digit angka</div>
+                    <?php } ?>
 
                     <form action="edit_action.php" method="POST" id="form-edit">
                         <input type="hidden" name="id" value="<?php echo $data['id']; ?>">
@@ -79,7 +85,7 @@ $tipe_akun_data = mysqli_query($conn, "SELECT * FROM account_type WHERE deleted_
                                 <select class="form-select" id="account_type_id" name="account_type_id" required>
                                     <option value="">-- Pilih Tipe Akun --</option>
                                     <?php while ($tipe = mysqli_fetch_array($tipe_akun_data)) { ?>
-                                        <option value="<?php echo $tipe['id']; ?>" <?php if ($tipe['id'] == $data['account_type_id'])
+                                        <option value="<?php echo $tipe['id']; ?>" data-name="<?php echo htmlspecialchars($tipe['name']); ?>" <?php if ($tipe['id'] == $data['account_type_id'])
                                                echo 'selected'; ?>>
                                             <?php echo $tipe['name']; ?>
                                         </option>
@@ -95,7 +101,7 @@ $tipe_akun_data = mysqli_query($conn, "SELECT * FROM account_type WHERE deleted_
                                     <option value="Nonaktif" <?php if ($data['status'] == 'Nonaktif')
                                         echo 'selected'; ?>>
                                         Nonaktif</option>
-                                </select>
+                                    </select>
                             </div>
                         </div>
 
@@ -135,6 +141,36 @@ $tipe_akun_data = mysqli_query($conn, "SELECT * FROM account_type WHERE deleted_
         const emailInput = document.getElementById('email');
         const emailWarning = document.getElementById('email-warning');
         const formEdit = document.getElementById('form-edit');
+        const accountTypeSelect = document.getElementById('account_type_id');
+        const idTypeSelect = document.getElementById('identification_type');
+        const idNumberInput = document.getElementById('identification_number');
+
+        function updateIdentificationType() {
+            const selectedOption = accountTypeSelect.options[accountTypeSelect.selectedIndex];
+            if (!selectedOption || !selectedOption.value) return;
+
+            const roleName = (selectedOption.getAttribute('data-name') || selectedOption.text || '').toLowerCase().trim();
+            if (roleName.includes('mahasiswa')) {
+                idTypeSelect.value = 'NIM';
+            } else if (roleName.includes('admin') || roleName.includes('dosen')) {
+                idTypeSelect.value = 'NIP';
+            }
+            updatePlaceholder();
+        }
+
+        function updatePlaceholder() {
+            if (idTypeSelect.value === 'NIM') {
+                idNumberInput.placeholder = 'Masukan 10 digit NIM';
+            } else if (idTypeSelect.value === 'NIP') {
+                idNumberInput.placeholder = 'Masukan 18 digit NIP';
+            } else {
+                idNumberInput.placeholder = 'Masukan Nomor Identitas';
+            }
+        }
+
+        accountTypeSelect.addEventListener('change', updateIdentificationType);
+        idTypeSelect.addEventListener('change', updatePlaceholder);
+        updatePlaceholder();
 
         function checkDomain() {
             const val = emailInput.value.trim();
@@ -168,6 +204,22 @@ $tipe_akun_data = mysqli_query($conn, "SELECT * FROM account_type WHERE deleted_
                 emailInput.classList.add('is-invalid');
                 emailWarning.style.display = 'block';
                 emailInput.focus();
+                return;
+            }
+
+            const idType = idTypeSelect.value;
+            const idNumber = idNumberInput.value.trim();
+            if (idType === 'NIM' && !/^\d{10}$/.test(idNumber)) {
+                e.preventDefault();
+                alert('NIM harus berupa 10 digit angka!');
+                idNumberInput.focus();
+                return;
+            }
+            if (idType === 'NIP' && !/^\d{18}$/.test(idNumber)) {
+                e.preventDefault();
+                alert('NIP harus berupa 18 digit angka!');
+                idNumberInput.focus();
+                return;
             }
         });
     </script>

@@ -71,7 +71,7 @@ $tipe_akun_data = mysqli_query($conn, "SELECT * FROM account_type WHERE deleted_
                                 <select class="form-select" id="account_type_id" name="account_type_id" required>
                                     <option value="">-- Pilih Tipe Akun --</option>
                                     <?php while ($tipe = mysqli_fetch_array($tipe_akun_data)) { ?>
-                                        <option value="<?php echo $tipe['id']; ?>"><?php echo $tipe['name']; ?></option>
+                                        <option value="<?php echo $tipe['id']; ?>" data-name="<?php echo htmlspecialchars($tipe['name']); ?>"><?php echo $tipe['name']; ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -90,6 +90,7 @@ $tipe_akun_data = mysqli_query($conn, "SELECT * FROM account_type WHERE deleted_
                                     class="form-label small fw-semibold text-secondary">Jenis Identitas</label>
                                 <select class="form-select" id="identification_type" name="identification_type"
                                     required>
+                                    <option value="">-- Pilih Jenis Identitas --</option>
                                     <option value="NIM">NIM</option>
                                     <option value="NIP">NIP</option>
                                 </select>
@@ -117,6 +118,35 @@ $tipe_akun_data = mysqli_query($conn, "SELECT * FROM account_type WHERE deleted_
         const emailInput = document.getElementById('email');
         const emailWarning = document.getElementById('email-warning');
         const formTambah = document.getElementById('form-tambah');
+        const accountTypeSelect = document.getElementById('account_type_id');
+        const idTypeSelect = document.getElementById('identification_type');
+        const idNumberInput = document.getElementById('identification_number');
+
+        function updateIdentificationType() {
+            const selectedOption = accountTypeSelect.options[accountTypeSelect.selectedIndex];
+            if (!selectedOption || !selectedOption.value) return;
+
+            const roleName = (selectedOption.getAttribute('data-name') || selectedOption.text || '').toLowerCase().trim();
+            if (roleName.includes('mahasiswa')) {
+                idTypeSelect.value = 'NIM';
+            } else if (roleName.includes('admin') || roleName.includes('dosen')) {
+                idTypeSelect.value = 'NIP';
+            }
+            updatePlaceholder();
+        }
+
+        function updatePlaceholder() {
+            if (idTypeSelect.value === 'NIM') {
+                idNumberInput.placeholder = 'Masukan 10 digit NIM';
+            } else if (idTypeSelect.value === 'NIP') {
+                idNumberInput.placeholder = 'Masukan 18 digit NIP';
+            } else {
+                idNumberInput.placeholder = 'Masukan Nomor Identitas';
+            }
+        }
+
+        accountTypeSelect.addEventListener('change', updateIdentificationType);
+        idTypeSelect.addEventListener('change', updatePlaceholder);
 
         function checkDomain() {
             const val = emailInput.value.trim();
@@ -150,6 +180,22 @@ $tipe_akun_data = mysqli_query($conn, "SELECT * FROM account_type WHERE deleted_
                 emailInput.classList.add('is-invalid');
                 emailWarning.style.display = 'block';
                 emailInput.focus();
+                return;
+            }
+
+            const idType = idTypeSelect.value;
+            const idNumber = idNumberInput.value.trim();
+            if (idType === 'NIM' && !/^\d{10}$/.test(idNumber)) {
+                e.preventDefault();
+                alert('NIM harus berupa 10 digit angka!');
+                idNumberInput.focus();
+                return;
+            }
+            if (idType === 'NIP' && !/^\d{18}$/.test(idNumber)) {
+                e.preventDefault();
+                alert('NIP harus berupa 18 digit angka!');
+                idNumberInput.focus();
+                return;
             }
         });
     </script>
