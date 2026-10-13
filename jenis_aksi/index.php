@@ -57,7 +57,9 @@ $data = mysqli_query($conn, $sql);
             <a href="index.php" class="btn btn-outline-secondary">Reset</a>
           <?php } ?>
         </form>
+        <?php if (isset($_SESSION['account_type_name']) && $_SESSION['account_type_name'] == 'Admin') { ?>                     
         <a href="tambah.php" class="btn btn-primary fw-semibold">+ Tambah Aksi</a>
+        <?php }?>
       </div>
 
         <div class="card shadow-sm border-0 rounded-3">
