@@ -101,9 +101,13 @@ $data = mysqli_query($conn, $sql);
                                 </td>
                                 <td class="text-center pe-3">
                                     <div class="d-flex justify-content-center gap-2">
+                                        <?php if (isset($_SESSION['account_type_name']) && $_SESSION['account_type_name'] == 'Admin') { ?>
                                         <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-warning">Edit</a>
-                                        <a href="hapus.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Yakin ingin menghapus akun ini?')">Hapus</a>
+                                        <a href="hapus.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Yakin ingin menghapus akun ini?')">Hapus</a> 
                                     </div>
+                                    <?php } else { ?>
+                                        <span class="text-muted">Tidak ada aksi</span>
+                                    <?php } ?>
                                 </td>
                             </tr>
                         <?php 

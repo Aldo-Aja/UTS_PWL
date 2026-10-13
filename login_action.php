@@ -20,6 +20,7 @@ if ($row && password_verify($password, $row['password'])) {
     $_SESSION['login'] = true;
     $_SESSION['name'] = $row['name'];
     $_SESSION['email'] = $row['email'];
+    $_SESSION['account_type_name'] = $row['account_type_name'];
     header("location:index.php");
 } else {
   header("location:login.php?pesan=gagal");
