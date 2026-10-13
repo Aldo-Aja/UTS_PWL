@@ -6,8 +6,8 @@ $email = trim($_POST['email']);
 $password = $_POST['password'];
 
 if (!preg_match('/^[a-zA-Z0-9._%+-]+@pnj\.ac\.id$/i', $email)) {
-    header("location:login.php?pesan=domain");
-    exit;
+  header("location:login.php?pesan=domain");
+  exit;
 }
 
 $query = mysqli_query($conn, "SELECT accounts.*, account_type.name AS account_type_name 
@@ -20,9 +20,7 @@ if ($row && password_verify($password, $row['password'])) {
     $_SESSION['login'] = true;
     $_SESSION['name'] = $row['name'];
     $_SESSION['email'] = $row['email'];
-    $_SESSION['account_type_name'] = $row['account_type_name'];
     header("location:index.php");
 } else {
-    header("location:login.php?pesan=gagal");
+  header("location:login.php?pesan=gagal");
 }
-?>
