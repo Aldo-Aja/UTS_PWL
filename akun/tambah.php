@@ -36,6 +36,12 @@ $tipe_akun_data = mysqli_query($conn, "SELECT * FROM account_type WHERE deleted_
                     <?php if (isset($_GET['pesan']) && $_GET['pesan'] == 'invalid_domain') { ?>
                         <div class="alert alert-danger py-2 small mb-3">Domain email harus @pnj.ac.id</div>
                     <?php } ?>
+                    <?php if (isset($_GET['pesan']) && $_GET['pesan'] == 'invalid_nim') { ?>
+                        <div class="alert alert-danger py-2 small mb-3">NIM harus berupa 10 digit angka</div>
+                    <?php } ?>
+                    <?php if (isset($_GET['pesan']) && $_GET['pesan'] == 'invalid_nip') { ?>
+                        <div class="alert alert-danger py-2 small mb-3">NIP harus berupa 18 digit angka</div>
+                    <?php } ?>
 
                     <form action="tambah_action.php" method="POST" id="form-tambah">
                         <div class="row g-3 mb-3">
