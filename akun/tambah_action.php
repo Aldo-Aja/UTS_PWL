@@ -14,21 +14,22 @@ $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 $account_type_id = $_POST['account_type_id'];
 $status = $_POST['status'];
 $identification_type = $_POST['identification_type'];
-$identification_number = $_POST['identification_number'];
+$identification_number = trim($_POST['identification_number']);
 $created_at = date('Y-m-d H:i:s');
 
-if($identification_type == 'NIM'){
-    if(!preg_match('/^[0-9]{10}$/', $identification_number)){
-      header("location:tambah.php?pesan=invalid_nim");
-    exit;  
+if ($identification_type == 'NIM') {
+    if (!preg_match('/^[0-9]{10}$/', $identification_number)) {
+        header("location:tambah.php?pesan=invalid_nim");
+        exit;  
     }
-}
-
-if($identification_type == 'NIP'){
-    if(!preg_match('/^[0-9]{18}$/', $identification_number)){
-      header("location:tambah.php?pesan=invalid_nip");
-    exit;  
+} else if ($identification_type == 'NIP') {
+    if (!preg_match('/^[0-9]{18}$/', $identification_number)) {
+        header("location:tambah.php?pesan=invalid_nip");
+        exit;  
     }
+} else {
+    header("location:tambah.php?pesan=invalid_identitas");
+    exit;
 }
 
 

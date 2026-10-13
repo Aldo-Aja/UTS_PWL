@@ -13,21 +13,22 @@ if (!preg_match('/^[a-zA-Z0-9._%+-]+@pnj\.ac\.id$/i', $email)) {
 $account_type_id = $_POST['account_type_id'];
 $status = $_POST['status'];
 $identification_type = $_POST['identification_type'];
-$identification_number = $_POST['identification_number'];
+$identification_number = trim($_POST['identification_number']);
 $updated_at = date('Y-m-d H:i:s');
 
-if($identification_type == 'NIM'){
-    if(!preg_match('/^[0-9]{10}$/', $identification_number)){
+if ($identification_type == 'NIM') {
+    if (!preg_match('/^[0-9]{10}$/', $identification_number)) {
         header("location:edit.php?id=" . urlencode($id) . "&pesan=invalid_nim");
         exit;  
     }
-}
-
-if($identification_type == 'NIP'){
-    if(!preg_match('/^[0-9]{18}$/', $identification_number)){
+} else if ($identification_type == 'NIP') {
+    if (!preg_match('/^[0-9]{18}$/', $identification_number)) {
         header("location:edit.php?id=" . urlencode($id) . "&pesan=invalid_nip");
         exit;  
     }
+} else {
+    header("location:edit.php?id=" . urlencode($id) . "&pesan=invalid_identitas");
+    exit;
 }
 
 if (!empty($_POST['password'])) {

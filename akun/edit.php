@@ -50,10 +50,13 @@ $tipe_akun_data = mysqli_query($conn, "SELECT * FROM account_type WHERE deleted_
                         <div class="alert alert-danger py-2 small mb-3">Domain email harus @pnj.ac.id</div>
                     <?php } ?>
                     <?php if (isset($_GET['pesan']) && $_GET['pesan'] == 'invalid_nim') { ?>
-                        <div class="alert alert-danger py-2 small mb-3">NIM harus berupa 10 digit angka</div>
+                        <div class="alert alert-danger py-2 small mb-3">NIM harus hanya berupa angka dan tepat 10 digit (tidak boleh kurang atau lebih)!</div>
                     <?php } ?>
                     <?php if (isset($_GET['pesan']) && $_GET['pesan'] == 'invalid_nip') { ?>
-                        <div class="alert alert-danger py-2 small mb-3">NIP harus berupa 18 digit angka</div>
+                        <div class="alert alert-danger py-2 small mb-3">NIP harus hanya berupa angka dan tepat 18 digit (tidak boleh kurang atau lebih)!</div>
+                    <?php } ?>
+                    <?php if (isset($_GET['pesan']) && $_GET['pesan'] == 'invalid_identitas') { ?>
+                        <div class="alert alert-danger py-2 small mb-3">Jenis identitas wajib dipilih (NIM atau NIP)!</div>
                     <?php } ?>
 
                     <form action="edit_action.php" method="POST" id="form-edit">
@@ -125,9 +128,11 @@ $tipe_akun_data = mysqli_query($conn, "SELECT * FROM account_type WHERE deleted_
                                 <label for="identification_number"
                                     class="form-label small fw-semibold text-secondary">Nomor Identitas (NIM /
                                     NIP)</label>
-                                <input type="text" class="form-control" id="identification_number"
-                                    name="identification_number" value="<?php echo $data['identification_number']; ?>"
-                                    placeholder="Masukan Nomor Identitas" required>
+                                <input type="text" inputmode="numeric" class="form-control" id="identification_number"
+                                    name="identification_number" value="<?php echo htmlspecialchars($data['identification_number']); ?>"
+                                    placeholder="Masukan Nomor Identitas" required autocomplete="off">
+                                <div id="id-warning" class="invalid-feedback"></div>
+                                <small id="id-counter" class="text-muted d-block mt-1" style="font-size: 0.825rem;"></small>
                             </div>
                         </div>
 
@@ -148,6 +153,8 @@ $tipe_akun_data = mysqli_query($conn, "SELECT * FROM account_type WHERE deleted_
         const accountTypeSelect = document.getElementById('account_type_id');
         const idTypeSelect = document.getElementById('identification_type');
         const idNumberInput = document.getElementById('identification_number');
+        const idWarning = document.getElementById('id-warning');
+        const idCounter = document.getElementById('id-counter');
 
         function updateIdentificationType() {
             const selectedOption = accountTypeSelect.options[accountTypeSelect.selectedIndex];
@@ -159,22 +166,93 @@ $tipe_akun_data = mysqli_query($conn, "SELECT * FROM account_type WHERE deleted_
             } else if (roleName.includes('admin') || roleName.includes('dosen')) {
                 idTypeSelect.value = 'NIP';
             }
-            updatePlaceholder();
+            updateIdConfig();
         }
 
-        function updatePlaceholder() {
-            if (idTypeSelect.value === 'NIM') {
-                idNumberInput.placeholder = 'Masukan 10 digit NIM';
-            } else if (idTypeSelect.value === 'NIP') {
-                idNumberInput.placeholder = 'Masukan 18 digit NIP';
+        function updateIdConfig() {
+            const idType = idTypeSelect.value;
+            if (idType === 'NIM') {
+                idNumberInput.setAttribute('maxlength', '10');
+                idNumberInput.placeholder = 'Masukan 10 digit NIM (hanya angka)';
+            } else if (idType === 'NIP') {
+                idNumberInput.setAttribute('maxlength', '18');
+                idNumberInput.placeholder = 'Masukan 18 digit NIP (hanya angka)';
             } else {
+                idNumberInput.removeAttribute('maxlength');
                 idNumberInput.placeholder = 'Masukan Nomor Identitas';
             }
+            validateIdNumber();
+        }
+
+        function validateIdNumber() {
+            const idType = idTypeSelect.value;
+            let val = idNumberInput.value;
+
+            // Validasi hanya angka
+            const cleaned = val.replace(/\D/g, '');
+            if (val !== cleaned) {
+                idNumberInput.value = cleaned;
+                val = cleaned;
+            }
+
+            if (!idType) {
+                idNumberInput.classList.remove('is-invalid', 'is-valid');
+                idWarning.style.display = 'none';
+                idCounter.textContent = 'Pilih jenis identitas terlebih dahulu.';
+                idCounter.className = 'text-muted d-block mt-1';
+                return false;
+            }
+
+            const targetLength = (idType === 'NIM') ? 10 : 18;
+
+            // Pastikan tidak bisa lebih dari targetLength
+            if (val.length > targetLength) {
+                val = val.slice(0, targetLength);
+                idNumberInput.value = val;
+            }
+
+            if (val.length === 0) {
+                idNumberInput.classList.remove('is-invalid', 'is-valid');
+                idWarning.style.display = 'none';
+                idCounter.textContent = `${idType} wajib berupa angka tepat ${targetLength} digit.`;
+                idCounter.className = 'text-muted d-block mt-1';
+                return false;
+            }
+
+            if (val.length < targetLength) {
+                const sisa = targetLength - val.length;
+                idNumberInput.classList.add('is-invalid');
+                idNumberInput.classList.remove('is-valid');
+                idWarning.textContent = `${idType} harus tepat ${targetLength} digit angka (tidak boleh kurang, kurang ${sisa} digit lagi).`;
+                idWarning.style.display = 'block';
+                idCounter.textContent = `Jumlah digit saat ini: ${val.length}/${targetLength}`;
+                idCounter.className = 'text-danger d-block mt-1';
+                return false;
+            }
+
+            // Tepat targetLength digit
+            idNumberInput.classList.remove('is-invalid');
+            idNumberInput.classList.add('is-valid');
+            idWarning.style.display = 'none';
+            idCounter.textContent = `Format ${idType} tepat (${val.length}/${targetLength} digit angka).`;
+            idCounter.className = 'text-success d-block mt-1';
+            return true;
         }
 
         accountTypeSelect.addEventListener('change', updateIdentificationType);
-        idTypeSelect.addEventListener('change', updatePlaceholder);
-        updatePlaceholder();
+        idTypeSelect.addEventListener('change', updateIdConfig);
+        updateIdConfig();
+
+        idNumberInput.addEventListener('keypress', function (e) {
+            if (!/[0-9]/.test(e.key)) {
+                e.preventDefault();
+                idNumberInput.classList.add('is-invalid');
+                idWarning.textContent = 'Nomor identitas hanya boleh berisi angka!';
+                idWarning.style.display = 'block';
+            }
+        });
+
+        idNumberInput.addEventListener('input', validateIdNumber);
 
         function checkDomain() {
             const val = emailInput.value.trim();
@@ -213,17 +291,32 @@ $tipe_akun_data = mysqli_query($conn, "SELECT * FROM account_type WHERE deleted_
 
             const idType = idTypeSelect.value;
             const idNumber = idNumberInput.value.trim();
-            if (idType === 'NIM' && !/^\d{10}$/.test(idNumber)) {
+
+            if (!idType) {
                 e.preventDefault();
-                alert('NIM harus berupa 10 digit angka!');
-                idNumberInput.focus();
+                alert('Peringatan: Silakan pilih jenis identitas (NIM atau NIP) terlebih dahulu!');
+                idTypeSelect.focus();
                 return;
             }
-            if (idType === 'NIP' && !/^\d{18}$/.test(idNumber)) {
-                e.preventDefault();
-                alert('NIP harus berupa 18 digit angka!');
-                idNumberInput.focus();
-                return;
+
+            if (idType === 'NIM') {
+                if (!/^\d{10}$/.test(idNumber)) {
+                    e.preventDefault();
+                    validateIdNumber();
+                    alert('Peringatan: NIM harus hanya berupa angka dan tepat 10 digit (tidak boleh kurang atau lebih)!');
+                    idNumberInput.focus();
+                    return;
+                }
+            }
+
+            if (idType === 'NIP') {
+                if (!/^\d{18}$/.test(idNumber)) {
+                    e.preventDefault();
+                    validateIdNumber();
+                    alert('Peringatan: NIP harus hanya berupa angka dan tepat 18 digit (tidak boleh kurang atau lebih)!');
+                    idNumberInput.focus();
+                    return;
+                }
             }
         });
     </script>
